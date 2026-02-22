@@ -6,14 +6,18 @@ export default [
   {
     languageOptions: {
       ecmaVersion: "latest",
-      sourceType: "commonjs",
+      // This must be "module" because you are using import/export in this file
+      sourceType: "module",
       globals: {
         ...globals.node,
-        ...globals.jest,
+        // Using built-in Node test globals if you aren't using Jest
+        ...globals.mocha,
       },
     },
     rules: {
-      "no-unused-vars": "warn",
+      // Changes unused variables to an error to keep code clean, 
+      // but ignores variables starting with an underscore (e.g., _blogs)
+      "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
       "no-console": "off",
     },
   },
