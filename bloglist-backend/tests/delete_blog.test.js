@@ -75,12 +75,10 @@ describe('deletion of a blog', () => {
   })
 
   test('fails with status code 401 if user is not the creator', async () => {
-    // Create another user
     const passwordHash = await bcrypt.hash('otherpassword', 10)
     const otherUser = new User({ username: 'other', passwordHash })
     await otherUser.save()
 
-    // Login as the other user
     const loginResponse = await api
       .post('/api/login')
       .send({ username: 'other', password: 'otherpassword' })
@@ -90,7 +88,6 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
-    // Try to delete the root user's blog with other user's token
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .set('Authorization', `Bearer ${otherToken}`)
@@ -101,12 +98,10 @@ describe('deletion of a blog', () => {
   })
 
   test('succeeds with status code 204 if user is admin', async () => {
-    // Create an admin user
     const passwordHash = await bcrypt.hash('adminpassword', 10)
     const adminUser = new User({ username: 'admin', role: 'admin', passwordHash })
     await adminUser.save()
 
-    // Login as the admin
     const loginResponse = await api
       .post('/api/login')
       .send({ username: 'admin', password: 'adminpassword' })
@@ -116,7 +111,6 @@ describe('deletion of a blog', () => {
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
 
-    // Admin should be able to delete any blog
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
       .set('Authorization', `Bearer ${adminToken}`)

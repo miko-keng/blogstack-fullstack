@@ -2,7 +2,7 @@ const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
-const bcrypt = require('bcryptjs') // <--- MISSING IMPORT FIXED HERE
+const bcrypt = require('bcryptjs')
 const app = require('../app')
 const api = supertest(app)
 const helper = require('./test_helper')
@@ -16,27 +16,24 @@ describe('when there is initially some blogs saved', () => {
     await Blog.deleteMany({})
     await User.deleteMany({})
 
-    // 1. Create a user document directly to ensure we have the ID
     const passwordHash = await bcrypt.hash('testpassword', 10)
-    const user = new User({ 
-      username: 'testuser', 
+    const user = new User({
+      username: 'testuser',
       name: 'Test User',
-      passwordHash 
+      passwordHash
     })
     const savedUser = await user.save()
 
-    // 2. Log in to get a valid token for the tests
     const loginResponse = await api
       .post('/api/login')
       .send({ username: 'testuser', password: 'testpassword' })
-    
+
     token = loginResponse.body.token
 
-    // 3. Save initial blogs and link them to our test user
     for (let blog of helper.initialBlogs) {
-      let blogObject = new Blog({ 
-        ...blog, 
-        user: savedUser._id 
+      let blogObject = new Blog({
+        ...blog,
+        user: savedUser._id
       })
       await blogObject.save()
     }
@@ -79,7 +76,7 @@ describe('when there is initially some blogs saved', () => {
 
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length + 1)
-      
+
       const titles = blogsAtEnd.map(b => b.title)
       assert(titles.includes('Testing the POST route'))
     })
@@ -106,7 +103,7 @@ describe('when there is initially some blogs saved', () => {
         author: 'Tester',
         url: 'https://test.com/'
       }
-      
+
       const response = await api
         .post('/api/blogs')
         .set('Authorization', `Bearer ${token}`)
@@ -129,7 +126,7 @@ describe('when there is initially some blogs saved', () => {
 
       const blogsAtEnd = await helper.blogsInDb()
       assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length - 1)
-      
+
       const titles = blogsAtEnd.map(r => r.title)
       assert(!titles.includes(blogToDelete.title))
     })

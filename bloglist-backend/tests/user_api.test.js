@@ -12,7 +12,7 @@ describe('when there is initially one user in db', () => {
 
     const newUser = new User({
       username: 'root',
-      passwordHash: 'secretpasswordhash', // In reality, use a real hash if needed
+      passwordHash: 'secretpasswordhash',
     })
 
     await newUser.save()
@@ -20,11 +20,11 @@ describe('when there is initially one user in db', () => {
 
   test('creation fails with proper statuscode and message if password is too short', async () => {
     const usersAtStart = await User.find({})
-    
+
     const newUser = {
       username: 'tester',
       name: 'Test User',
-      password: '12' // Invalid: too short
+      password: '12'
     }
 
     const result = await api
@@ -41,9 +41,9 @@ describe('when there is initially one user in db', () => {
 
   test('creation fails with proper statuscode and message if username is too short', async () => {
     const usersAtStart = await User.find({})
-    
+
     const newUser = {
-      username: 'te', // Invalid: too short
+      username: 'te',
       name: 'Test User',
       password: 'validpassword'
     }
@@ -54,7 +54,6 @@ describe('when there is initially one user in db', () => {
       .expect(400)
       .expect('Content-Type', /application\/json/)
 
-    // This message comes from your controller if check
     assert.strictEqual(result.body.error, 'username must be at least 3 characters long')
 
     const usersAtEnd = await User.find({})
@@ -63,9 +62,9 @@ describe('when there is initially one user in db', () => {
 
   test('creation fails if username is not unique', async () => {
     const usersAtStart = await User.find({})
-    
+
     const newUser = {
-      username: 'root', // Already exists in beforeEach
+      username: 'root',
       name: 'Superuser',
       password: 'validpassword'
     }
