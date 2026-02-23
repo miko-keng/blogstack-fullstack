@@ -1,4 +1,4 @@
-# BlogList Application: Architecture & Interview Guide
+# BlogList Application: Architecture Guide
 
 ## Project Overview
 BlogList is a full-stack web application that allows users to create, view, and manage blog posts. It consists of a Node.js/Express backend API and a React frontend with user authentication and authorization.
