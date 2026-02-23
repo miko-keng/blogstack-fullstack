@@ -37,4 +37,4 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - name: Verify Docker Image Build
-        run: docker build -t blogstack-backend ./bloglist-backend
+        run: docker build -t blogstack-backend -f ../Dockerfile .

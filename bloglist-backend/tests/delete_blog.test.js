@@ -11,28 +11,32 @@ const User = require('../models/user')
 
 describe('deletion of a blog', () => {
   let token = null
-  let user = null
+  let mainUser = null
 
   beforeEach(async () => {
+    // 1. Clear database completely
     await Blog.deleteMany({})
     await User.deleteMany({})
 
+    // 2. Create the creator user
     const passwordHash = await bcrypt.hash('secret', 10)
-    user = new User({ username: 'root', passwordHash })
-    await user.save()
+    mainUser = new User({ username: 'root', passwordHash })
+    await mainUser.save()
 
+    // 3. Get token
     const loginResponse = await api
       .post('/api/login')
       .send({ username: 'root', password: 'secret' })
 
     token = loginResponse.body.token
 
+    // 4. Create an initial blog linked to the creator
     const blogObject = new Blog({
       title: 'First Blog',
       author: 'Author 1',
       url: 'http://url1.com',
       likes: 1,
-      user: user._id
+      user: mainUser._id
     })
     await blogObject.save()
   })
@@ -71,10 +75,12 @@ describe('deletion of a blog', () => {
       .expect(401)
 
     const blogsAtEnd = await helper.blogsInDb()
-    assert.strictEqual(blogsAtEnd.length, blogsAtStart.length)
+    // Verify length remains 1
+    assert.strictEqual(blogsAtEnd.length, 1)
   })
 
   test('fails with status code 401 if user is not the creator', async () => {
+    // Create another user to attempt the deletion
     const passwordHash = await bcrypt.hash('otherpassword', 10)
     const otherUser = new User({ username: 'other', passwordHash })
     await otherUser.save()
@@ -87,6 +93,9 @@ describe('deletion of a blog', () => {
 
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
+
+    // Ensure blog exists before proceeding
+    assert.ok(blogToDelete, 'Blog should exist in database')
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
@@ -110,6 +119,8 @@ describe('deletion of a blog', () => {
 
     const blogsAtStart = await helper.blogsInDb()
     const blogToDelete = blogsAtStart[0]
+
+    assert.ok(blogToDelete, 'Blog should exist in database for admin test')
 
     await api
       .delete(`/api/blogs/${blogToDelete.id}`)
