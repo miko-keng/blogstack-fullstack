@@ -1,69 +1,38 @@
 # BlogStack
 
-A full-stack **MERN** application for managing blog lists, featuring secure authentication and role-based permissions.
+A professional-grade **MERN** application for managing blog lists, featuring secure authentication, role-based permissions, and automated CI/CD.
+
+![Build Status](https://github.com/jessiekeng/part4_bloglist_backend/actions/workflows/pipeline.yml/badge.svg)
 
 ## 🚀 Live Demo
-> _(Add your live demo link here when ready)_
+[View Live on Render](https://blogstack-fullstack.onrender.com/)
 
 ---
 
 ## 🛠 Tech Stack
 
-**Frontend**
+**Frontend & UI**
 - React (Vite)
-- Axios
+- Tailwind CSS
 
-**Backend**
-- Node.js
-- Express
+**Backend & Infrastructure**
+- Node.js & Express
 - MongoDB (Mongoose)
+- **Docker** (Containerization)
+- **GitHub Actions** (CI/CD)
 
-**Authentication**
+**Security & Quality**
 - JWT (JSON Web Tokens)
-
-**Deployment**
-- Render (with CI/CD)
-
----
-
-## ✨ Core Features
-
-- **RESTful API**  
-  Clean and scalable backend architecture for managing blog resources.
-
-- **Secure Authentication**  
-  JWT-based login with persistent sessions.
-
-- **Role-Based Access Control (RBAC)**  
-  Custom middleware to restrict CRUD operations based on user roles.
-
-- **Automated Deployment**  
-  CI/CD pipeline on Render for seamless production updates.
+- ESLint v9 (Static Analysis)
+- Supertest (Integration Testing)
 
 ---
 
-## 🚀 Quick Start
+## 🐳 Docker Support
+This project is fully containerized to ensure environment parity across development and production.
 
-### 1. Clone the Repository
+**Build and run locally:**
 ```bash
-git clone https://github.com/jessiekeng/part4_bloglist_backend.git
-cd part4_bloglist_backend
-```
-
-### 2. Install Dependencies
-Run the following command to install all required packages:
-```bash
-npm install
-```
-
-### 3. Environment Setup
-Create a .env file in the root directory and add your environment variables:
-MONGODB_URI=your_mongodb_connection_string
-SECRET=your_jwt_secret
-
-### 4. Run the Application
-Start the development server with:
-```bash
-npm run dev
-```
-
+# From the bloglist-backend directory
+docker build -t blogstack-backend .
+docker run -p 3003:3003 --env-file .env blogstack-backend
