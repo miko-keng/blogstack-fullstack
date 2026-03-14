@@ -3,7 +3,7 @@
 A full-stack **MERN** application for managing blog lists, featuring secure authentication and role-based permissions.
 
 ## 🚀 Live Demo
-> _(Add your live demo link here when ready)_
+> https://blogstack-fullstack.onrender.com
 
 ---
 
