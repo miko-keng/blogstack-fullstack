@@ -29,7 +29,7 @@ A professional-grade **MERN** application for managing blog lists, featuring sec
 ---
 
 ## 🐳 Docker Support
-This project is fully containerized to ensure environment parity across development and production.
+This project is fully containerized to ensure environment parity across development and production
 
 **Build and run locally:**
 ```bash
