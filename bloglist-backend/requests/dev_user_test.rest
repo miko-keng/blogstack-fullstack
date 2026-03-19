@@ -1,0 +1,108 @@
+@baseUrl = https://blogstack-fullstack.onrender.com/api
+
+### 1. CREATE USERS (Run these first)
+
+# @name createAlice
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "alice_dev",
+  "name": "Alice Tan",
+  "password": "password123"
+}
+
+###
+
+# @name createBob
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "bob_data",
+  "name": "Bob Lim",
+  "password": "password123"
+}
+
+###
+
+# @name createCharlie
+POST {{baseUrl}}/users
+Content-Type: application/json
+
+{
+  "username": "charlie_code",
+  "name": "Charlie Wong",
+  "password": "password123"
+}
+
+### 2. LOGIN TO GET TOKENS
+
+# @name loginAlice
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "alice_dev",
+  "password": "password123"
+}
+
+###
+
+# @name loginBob
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "bob_data",
+  "password": "password123"
+}
+
+###
+
+# @name loginCharlie
+POST {{baseUrl}}/login
+Content-Type: application/json
+
+{
+  "username": "charlie_code",
+  "password": "password123"
+}
+
+### 3. CREATE BLOGS (Linked to each user)
+
+### Alice's Blog
+POST {{baseUrl}}/blogs
+Content-Type: application/json
+Authorization: Bearer {{loginAlice.response.body.token}}
+
+{
+  "title": "React Best Practices 2026",
+  "author": "Alice Tan",
+  "url": "https://react.dev",
+  "likes": 15
+}
+
+### Bob's Blog
+POST {{baseUrl}}/blogs
+Content-Type: application/json
+Authorization: Bearer {{loginBob.response.body.token}}
+
+{
+  "title": "Data Science at Sunway University",
+  "author": "Bob Lim",
+  "url": "https://sunway.edu.my",
+  "likes": 42
+}
+
+### Charlie's Blog
+POST {{baseUrl}}/blogs
+Content-Type: application/json
+Authorization: Bearer {{loginCharlie.response.body.token}}
+
+{
+  "title": "Node.js Performance Tips",
+  "author": "Charlie Wong",
+  "url": "https://nodejs.org",
+  "likes": 8
+}

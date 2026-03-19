@@ -1,5 +1,8 @@
+@baseUrl = https://blogstack-fullstack.onrender.com/api
+
+### 1. LOGIN AS ADMIN
 # @name loginAdmin
-POST http://localhost:3003/api/login
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
@@ -7,20 +10,47 @@ Content-Type: application/json
   "password": "adminpassword123"
 }
 
-### Delete Charlie's blog using the CORRECT ID
-DELETE http://localhost:3003/api/blogs/69bb9fa46c4ec89daed5516e
-Authorization: Bearer {{loginAdmin.response.body.token}}
-
-### Use the ID of Alice's first blog from your GET list
-PUT http://localhost:3003/api/blogs/69bb9eab6c4ec89daed55164
+### 2. LOGIN AS A REGULAR USER (For Comparison)
+# @name loginAlice
+POST {{baseUrl}}/login
 Content-Type: application/json
 
 {
-  "title": "React Best Practices 2026",
-  "author": "Alice Tan",
-  "url": "https://react.dev",
-  "likes": 100
+  "username": "alice_dev",
+  "password": "password123"
 }
 
-###
-GET http://localhost:3003/api/blogs
+### ------------------------------------------------------------
+### TEST A: GET ALL BLOGS (To find a target ID)
+### ------------------------------------------------------------
+# @name getBlogs
+GET {{baseUrl}}/blogs
+
+### ------------------------------------------------------------
+### TEST B: UNAUTHORIZED DELETE (Should FAIL - 401/403)
+### Alice tries to delete Bob's blog (or any blog she didn't make)
+### ------------------------------------------------------------
+DELETE {{baseUrl}}/blogs/69bba7dd9cf804d59ccb2154
+Authorization: Bearer {{loginAlice.response.body.token}}
+
+### ------------------------------------------------------------
+### TEST C: ADMIN DELETE (Should PASS - 204)
+### Jessie (Admin) deletes the same blog Alice couldn't
+### ------------------------------------------------------------
+DELETE {{baseUrl}}/blogs/69bba7dd9cf804d59ccb2154
+Authorization: Bearer {{loginAdmin.response.body.token}}
+
+### ------------------------------------------------------------
+### TEST D: ADMIN UPDATE (God Mode Edit)
+### Admin changes the likes or title of any blog
+### ------------------------------------------------------------
+PUT {{baseUrl}}/blogs/69bba7e59cf804d59ccb2159
+Content-Type: application/json
+Authorization: Bearer {{loginAdmin.response.body.token}}
+
+{
+  "title": "Admin Verified Content",
+  "author": "Alice Tan",
+  "url": "https://react.dev",
+  "likes": 999
+}
