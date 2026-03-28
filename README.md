@@ -35,3 +35,19 @@ This project is fully containerized to ensure environment parity across developm
 # From the bloglist-backend directory
 docker build -t blogstack-backend .
 docker run -p 3003:3003 --env-file .env blogstack-backend
+---
+
+## 👥 Demo Accounts
+
+You can use these accounts to try out the app:
+
+### Normal User
+- **Username:** `alice_dev`
+- **Name:** Alice Tan
+- **Password:** `password123`
+
+### Admin User
+- **Username:** `admin_jessie`
+- **Name:** Jessie Admin
+- **Password:** `adminpassword123`
+- **Role:** admin
