@@ -39,8 +39,6 @@ docker run -p 3003:3003 --env-file .env blogstack-backend
 
 ## 👥 Demo Accounts
 
-You can use these accounts to try out the app:
-
 ### Normal User
 - **Username:** `alice_dev`
 - **Name:** Alice Tan
