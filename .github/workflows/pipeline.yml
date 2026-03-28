@@ -47,7 +47,22 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and Push Docker Image
+      - name: Build Docker Image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          load: true                # load image into runner for testing
+          tags: blogstack-backend:test
+
+      - name: Test Docker Image
+        run: |
+          docker run -d --name test-backend -p 3003:3003 blogstack-backend:test
+          sleep 5
+          curl -f http://localhost:3003 || exit 1
+          docker stop test-backend
+          docker rm test-backend
+
+      - name: Push Docker Image
         uses: docker/build-push-action@v5
         with:
           context: .
