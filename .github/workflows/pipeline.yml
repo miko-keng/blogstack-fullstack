@@ -1,7 +1,8 @@
 name: Deployment Pipeline
 
+# Force all JS actions to run on Node.js 24 to avoid deprecation warnings
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # forces Node.js 24 for all actions
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
 
 on:
   push:
@@ -54,36 +55,14 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./bloglist-backend
-          load: true
+          load: true                  # load image into runner for testing
           tags: blogstack-backend:test
 
       - name: Test Docker Image
         run: |
-          echo "Starting test container..."
           docker run -d --name test-backend -p 3003:3003 blogstack-backend:test
-
-          echo "Waiting for the server to start..."
-          SUCCESS=0
-          for i in {1..10}; do
-            if curl -f http://localhost:3003; then
-              SUCCESS=1
-              echo "Server responded successfully!"
-              break
-            else
-              echo "Attempt $i: server not ready yet, retrying in 2s..."
-              sleep 2
-            fi
-          done
-
-          if [ $SUCCESS -ne 1 ]; then
-            echo "Server did not respond after 20s. Showing container logs:"
-            docker logs test-backend
-            docker stop test-backend
-            docker rm test-backend
-            exit 1
-          fi
-
-          echo "Stopping and removing test container..."
+          sleep 10
+          curl -f http://localhost:3003 || exit 1
           docker stop test-backend
           docker rm test-backend
 
