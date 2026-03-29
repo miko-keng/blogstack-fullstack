@@ -27,17 +27,6 @@ A professional-grade **MERN** application for managing blog lists, featuring sec
 
 ---
 
-## 🐳 Docker Support
-This project is fully containerized to ensure environment parity across development and production.
-
-**Build and run locally:**
-```bash
-# From the bloglist-backend directory
-docker build -t blogstack-backend .
-docker run -p 3003:3003 --env-file .env blogstack-backend
-```
----
-
 ## 👥 Demo Accounts
 
 ### Normal User
