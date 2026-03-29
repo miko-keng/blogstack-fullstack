@@ -1,5 +1,8 @@
 name: Deployment Pipeline
 
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # forces Node.js 24 for all actions
+
 on:
   push:
     branches: [main]
@@ -57,7 +60,7 @@ jobs:
       - name: Test Docker Image
         run: |
           docker run -d --name test-backend -p 3003:3003 blogstack-backend:test
-          sleep 5
+          sleep 10
           curl -f http://localhost:3003 || exit 1
           docker stop test-backend
           docker rm test-backend
