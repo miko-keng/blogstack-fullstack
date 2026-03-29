@@ -1,7 +1,7 @@
 name: Deployment Pipeline
 
 env:
-  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # forces Node.js 24 for all JS actions
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true   # forces Node.js 24 for all actions
 
 on:
   push:
@@ -21,8 +21,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '24'   # explicitly use Node 24
-
+          node-version: '22'
+      
       - name: Install dependencies
         run: npm install
 
@@ -40,6 +40,15 @@ jobs:
     needs: test_and_lint
     steps:
       - uses: actions/checkout@v4
+
+      - name: List Dockerfile
+        run: |
+          echo "Checking for Dockerfile in bloglist-backend..."
+          ls -l ./bloglist-backend
+          if [ ! -f ./bloglist-backend/Dockerfile ]; then
+            echo "ERROR: Dockerfile not found!"
+            exit 1
+          fi
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
